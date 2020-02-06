@@ -58,7 +58,7 @@ function get_results(semcode, roll) {
   })
 }
 
-function addResult(res) {
+function addResult(res, turnOffSpinner = false) {
   if ($("#tab-head").text() === "") {
 
     /* Add table headers */
@@ -103,6 +103,9 @@ function addResult(res) {
   
   document.getElementById("tab-body").appendChild(tr)
 
+  if (turnOffSpinner)
+    $("#spin-load").hide()
+
 }
 
 function loopres() { 
@@ -118,10 +121,12 @@ function loopres() {
   if ((start.length !== 11 || end.length !== 11) && parseInt(start) > parseInt(end))
     return;
   
+  $("#spin-load").show()
+  
   for (let i=parseInt(start); i<=parseInt(end); i++) {
     get_results(sem, i.toString(10)).then( data => {
       console.log(data)
-      addResult(data)
+      addResult(data, i===parseInt(end))
     })
   }
   
